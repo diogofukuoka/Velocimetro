@@ -232,20 +232,8 @@ export default function App() {
       {/* Main Display */}
       <main className="flex-1 flex flex-col items-center justify-center w-full max-w-md gap-8 sm:gap-12 py-6">
         
-        {/* Speedometer Ring */}
-        <div className="relative w-80 h-80 sm:w-[440px] sm:h-[440px] shrink-0 rounded-full border-[6px] border-white/5 flex flex-col items-center justify-center bg-gradient-to-b from-white/5 to-transparent shadow-[inset_0_-40px_80px_rgba(0,0,0,0.8)]">
-          <AnimatePresence>
-            {isTracking && (
-              <motion.div 
-                initial={{ opacity: 0, scale: 0.8 }}
-                animate={{ opacity: 1, scale: 1 }}
-                exit={{ opacity: 0 }}
-                className="absolute inset-0 rounded-full border-[6px] border-emerald-400/20"
-                style={{ clipPath: 'polygon(0 0, 100% 0, 100% 50%, 0 50%)' }}
-              />
-            )}
-          </AnimatePresence>
- 
+        {/* Speedometer Display */}
+        <div className="relative flex flex-col items-center justify-center shrink-0 py-8">
           <div className="flex flex-col items-center z-10 pt-4">
             <motion.span 
               layout
