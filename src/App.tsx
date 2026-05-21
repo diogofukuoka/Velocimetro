@@ -117,6 +117,11 @@ export default function App() {
           // Se o dispositivo fornece a velocidade, damos prioridade alta para ela
           if (deviceSpeed !== null && deviceSpeed >= 0) {
             currentSpeedKmh = deviceSpeed * 3.6;
+            
+            // Fallback de velocidade caso a API do GPS retorne 0 mas haja deslocamento real
+            if (currentSpeedKmh === 0 && distCovered > 2 && timeElapsed > 0.5) {
+              currentSpeedKmh = (distCovered / timeElapsed) * 3.6;
+            }
           } else if (timeElapsed > 0.05) {
             currentSpeedKmh = (distCovered / timeElapsed) * 3.6;
           }
@@ -130,11 +135,11 @@ export default function App() {
             setIsStopped(false);
             setSpeed(currentSpeedKmh);
             
-            // Permite uma tolerância maior de precisão (até 50 metros) em dispositivos móveis
-            // para evitar o descarte de dados legítimos ao se deslocar a pé.
-            if (deviceAccuracy < 50) {
-              // Evita picos absurdos de erro de medição GPS (pulsações irreais acima de 120 km/h)
-              if (currentSpeedKmh < 120) {
+            // Flexibilizamos a precisão para aceitar dados em veículos rápidos como scooters
+            // (onde a precisão inicial pode oscilar além dos 50m e chegar a até 100m~200m).
+            if (deviceAccuracy < 200) {
+              // Evita picos absurdos de erro de medição GPS (pulsações irreais)
+              if (currentSpeedKmh < 150) {
                 setDistance((prev) => prev + distCovered);
               }
             }
@@ -159,8 +164,7 @@ export default function App() {
         lastPositionRef.current = { lat: latitude, lon: longitude, timestamp };
       },
       (error) => {
-        // IMPORTANTE: NÃO pare o rastreamento em caso de erro de timeout ou sinal fraco!
-        // Apenas erros fatais (ex: permissão negada) devem desativar o rastreamento.
+        // IMPORTANTE: NÃO pare o rastreamento em caso de erro de sinal intermitente.
         if (error.code === error.PERMISSION_DENIED) {
           setIsTracking(false);
           setIsStopped(true);
@@ -169,18 +173,14 @@ export default function App() {
             navigator.geolocation.clearWatch(watchIdRef.current);
             watchIdRef.current = null;
           }
-        } else if (error.code === error.POSITION_UNAVAILABLE) {
-          setError('Sinal de GPS fraco. Aguardando conexão mais precisa...');
-        } else if (error.code === error.TIMEOUT) {
-          setError('Procurando sinal de GPS... Mantenha o celular ao ar livre.');
-        } else {
-          setError('Conexão GPS instável. Tentando reconectar...');
         }
+        // Removemos o aviso visual de timeout e sinal fraco pois, na rua e em movimento, 
+        // interrupções de milissegundos são normais e não devem assustar o usuário nem bloquear a tela.
       },
       {
         enableHighAccuracy: true,
-        maximumAge: 0,
-        timeout: 12000, // Aumentado para 12 segundos para dar tempo do chip GPS inicializar sem falhar
+        maximumAge: 2000, // Aceita leituras em cache de até 2s, útil para movimento rápido sem perda
+        timeout: 60000, // Ampliado para 60 segundos para evitar engasgos ao procurar sinal
       }
     );
   };
