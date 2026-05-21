@@ -230,10 +230,10 @@ export default function App() {
       </header>
 
       {/* Main Display */}
-      <main className="flex-1 flex flex-col items-center justify-center w-full max-w-sm gap-8 sm:gap-10 py-6">
+      <main className="flex-1 flex flex-col items-center justify-center w-full max-w-md gap-8 sm:gap-12 py-6">
         
         {/* Speedometer Ring */}
-        <div className="relative w-56 h-56 sm:w-72 sm:h-72 shrink-0 rounded-full border-[6px] border-white/5 flex flex-col items-center justify-center bg-gradient-to-b from-white/5 to-transparent shadow-[inset_0_-40px_80px_rgba(0,0,0,0.8)]">
+        <div className="relative w-80 h-80 sm:w-[440px] sm:h-[440px] shrink-0 rounded-full border-[6px] border-white/5 flex flex-col items-center justify-center bg-gradient-to-b from-white/5 to-transparent shadow-[inset_0_-40px_80px_rgba(0,0,0,0.8)]">
           <AnimatePresence>
             {isTracking && (
               <motion.div 
@@ -245,20 +245,20 @@ export default function App() {
               />
             )}
           </AnimatePresence>
-
-          <div className="flex flex-col items-center z-10">
+ 
+          <div className="flex flex-col items-center z-10 pt-4">
             <motion.span 
               layout
-              className="text-7xl sm:text-8xl font-mono font-bold tracking-tighter text-emerald-400 drop-shadow-[0_0_30px_rgba(52,211,153,0.3)]"
+              className="text-[10.5rem] sm:text-[14.5rem] font-mono font-black tracking-tighter leading-none text-emerald-400 drop-shadow-[0_0_40px_rgba(52,211,153,0.35)]"
             >
               {Math.floor(speed)}
             </motion.span>
-            <span className="text-lg sm:text-xl font-medium tracking-widest text-emerald-400/60 uppercase mt-[-5px] sm:mt-[-10px]">
+            <span className="text-xl sm:text-2xl font-bold tracking-widest text-emerald-400/60 uppercase mt-[-10px] sm:mt-[-15px]">
               km/h
             </span>
-
+ 
             {/* Indicador Parado/Movimento */}
-            <div className="h-8 mt-2 sm:mt-4 overflow-hidden flex items-center justify-center">
+            <div className="h-8 mt-3 sm:mt-5 overflow-hidden flex items-center justify-center">
               <AnimatePresence mode="popLayout">
                 {isTracking && (
                   <motion.div
@@ -281,55 +281,55 @@ export default function App() {
             </div>
           </div>
         </div>
-
+ 
         {/* Distance Display */}
         <div className="flex flex-col items-center">
           <span className="text-xs sm:text-sm font-medium text-white/40 uppercase tracking-widest mb-1">
             Distância Percorrida
           </span>
-          <span className="text-3xl sm:text-4xl font-mono font-bold text-white tracking-tight">
+          <span className="text-5xl sm:text-7xl font-mono font-black text-white tracking-tight">
             {formatDistance(distance)}
           </span>
         </div>
-
+ 
         {/* Real-time Metrics Grid */}
         <div className="w-full grid grid-cols-2 gap-3 sm:gap-4">
-          <div className="bg-white/5 rounded-2xl p-5 flex flex-col gap-2 border border-white/5">
+          <div className="bg-white/5 rounded-2xl p-4 sm:p-5 flex flex-col gap-1 sm:gap-2 border border-white/5">
             <div className="flex items-center gap-2 text-white/40">
               <Clock className="w-4 h-4" />
               <span className="text-[10px] sm:text-xs font-semibold uppercase tracking-widest">Viagem</span>
             </div>
-            <span className="text-2xl sm:text-3xl font-mono font-bold">
+            <span className="text-4xl sm:text-5xl font-mono font-black tracking-tight text-white shrink-0 truncate">
               {getEstimatedTravelTime(distance / 1000)}
             </span>
           </div>
           
-          <div className="bg-white/5 rounded-2xl p-5 flex flex-col gap-2 border border-white/5">
+          <div className="bg-white/5 rounded-2xl p-4 sm:p-5 flex flex-col gap-1 sm:gap-2 border border-white/5">
             <div className="flex items-center gap-2 text-white/40">
               <BatteryMedium className="w-4 h-4" />
               <span className="text-[10px] sm:text-xs font-semibold uppercase tracking-widest">Bateria Usada</span>
             </div>
-            <span className="text-2xl sm:text-3xl font-mono font-bold">
+            <span className="text-4xl sm:text-5xl font-mono font-black tracking-tight text-white shrink-0 truncate">
               {getBatteryPercentageConsumed(distance / 1000)}%
             </span>
           </div>
-
-          <div className="bg-amber-500/10 rounded-2xl p-5 flex flex-col gap-2 border border-amber-500/20">
+ 
+          <div className="bg-amber-500/10 rounded-2xl p-4 sm:p-5 flex flex-col gap-1 sm:gap-2 border border-amber-500/20">
             <div className="flex items-center gap-2 text-amber-400">
               <Coins className="w-4 h-4 text-amber-400" />
               <span className="text-[10px] sm:text-xs font-semibold uppercase tracking-widest">Custo</span>
             </div>
-            <span className="text-2xl sm:text-3xl font-mono font-bold text-amber-400">
+            <span className="text-4xl sm:text-5xl font-mono font-black tracking-tight text-amber-400 shrink-0 truncate">
               R$ {getTravelCost(distance / 1000)}
             </span>
           </div>
-
-          <div className="bg-emerald-500/10 rounded-2xl p-5 flex flex-col gap-2 border border-emerald-500/20">
+ 
+          <div className="bg-emerald-500/10 rounded-2xl p-4 sm:p-5 flex flex-col gap-1 sm:gap-2 border border-emerald-500/20">
             <div className="flex items-center gap-2 text-emerald-400">
               <Zap className="w-4 h-4" />
               <span className="text-[10px] sm:text-xs font-semibold uppercase tracking-widest">Recarga</span>
             </div>
-            <span className="text-2xl sm:text-3xl font-mono font-bold text-emerald-400">
+            <span className="text-4xl sm:text-5xl font-mono font-black tracking-tight text-emerald-400 shrink-0 truncate">
               {getRechargeTime(distance / 1000)}
             </span>
           </div>
@@ -352,7 +352,7 @@ export default function App() {
       </main>
 
       {/* Controls */}
-      <footer className="w-full max-w-sm pb-4 sm:pb-8 z-10">
+      <footer className="w-full max-w-md pb-4 sm:pb-8 z-10">
         {!isTracking ? (
           <button
             onClick={startTracking}
